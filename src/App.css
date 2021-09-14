@@ -7,9 +7,24 @@
 }
 
 #gameBoardTargets {
-  width: 90%;
-  max-width: 1200px;
+  max-width: 1300px;
   margin-top: 7vh;
+}
+
+#gameBoardTargets:hover {
+  cursor: crosshair;
+}
+
+#popupWindow {
+  position: absolute;
+  color: white;
+  background-color: black;
+  display: none;
+}
+
+.popupItem:hover {
+  opacity: 0.5;
+  cursor: grab;
 }
 
 #gameBoardTimeTracking {
