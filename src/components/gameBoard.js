@@ -1,38 +1,50 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import pokemonBkg from "../images/waldoPokemonBackground.JPG";
+import characterBkg from "../images/characterBackground.JPG";
+import zoidbergPhoto from "../images/zoidberg.JPG";
+import saitamaPhoto from "../images/saitama.JPG";
+import phineasPhoto from "../images/phineas.JPG";
 
 const GameBoard = () => {
-  const [seconds, setSeconds] = useState(0);
-  const [miniutes, setMinutes] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [time, setTime] = useState([]);
+  const [time, setTime] = useState({
+    seconds: 0,
+    miniutes: 0,
+    hours: 0,
+  });
   const [menuDropdownPosition, setMenuDropdownPosition] = useState([0, 0]);
   const [mouseGuessTarget, setMouseGuessTarget] = useState([0, 0]);
+  const [characterStatus, setCharacterStauts] = useState({
+    zoidbergStatus: "Missing",
+    phineasStatus: "Missing",
+    saitamaStatus: "Missing",
+  });
   const [score, setScore] = useState([]);
 
   useEffect(() => {
     timeTracker.startTimer();
   }, []);
 
+  useEffect(() => {
+    targetPositions.gameOver();
+  }, [characterStatus]);
+
   const timer = () => {
+    //Fix copy ...time issue
     if (timeTracker.seconds < 59) {
       timeTracker.seconds += 1;
-      setSeconds(timeTracker.seconds);
-      timeTracker.stopTimer();
     } else if (timeTracker.miniutes < 59) {
-      timeTracker.miniutes += 1;
-      setMinutes(timeTracker.miniutes);
       timeTracker.seconds = 0;
-      setSeconds(timeTracker.seconds);
+      timeTracker.miniutes += 1;
     } else if (timeTracker.hours < 59) {
-      timeTracker.hours += 1;
-      setHours(timeTracker.hours);
       timeTracker.seconds = 0;
       timeTracker.miniutes = 0;
-      setSeconds(timeTracker.seconds);
-      setMinutes(timeTracker.miniutes);
+      timeTracker.hours += 1;
     }
+    setTime({
+      seconds: timeTracker.seconds,
+      miniutes: timeTracker.miniutes,
+      hours: timeTracker.hours,
+    });
   };
 
   const timeTracker = {
@@ -76,29 +88,69 @@ const GameBoard = () => {
   const targetPositions = {
     guess: (e) => {
       const selection = e.target.innerText;
-      const groudon = targetPositions.groudon;
+      const zoidberg = targetPositions.zoidberg;
+      const phineas = targetPositions.phineas;
+      const saitama = targetPositions.saitama;
       if (
-        selection === groudon.name &&
-        mouseGuessTarget[0] > groudon.minX &&
-        mouseGuessTarget[0] < groudon.maxX &&
-        mouseGuessTarget[1] > groudon.minY &&
-        mouseGuessTarget[1] < groudon.maxY
+        selection === zoidberg.name &&
+        mouseGuessTarget[0] > zoidberg.minX &&
+        mouseGuessTarget[0] < zoidberg.maxX &&
+        mouseGuessTarget[1] > zoidberg.minY &&
+        mouseGuessTarget[1] < zoidberg.maxY
       ) {
-        const answer = `${timeTracker.formatTime(
-          hours
-        )} : ${timeTracker.formatTime(miniutes)} : ${timeTracker.formatTime(
-          seconds
-        )}`;
-        setScore(answer);
+        setCharacterStauts({ ...characterStatus, zoidbergStatus: "Found" });
+        document.getElementById("characterZoidbergStatus").style.color =
+          "Green";
+      } else if (
+        selection === phineas.name &&
+        mouseGuessTarget[0] > phineas.minX &&
+        mouseGuessTarget[0] < phineas.maxX &&
+        mouseGuessTarget[1] > phineas.minY &&
+        mouseGuessTarget[1] < phineas.maxY
+      ) {
+        setCharacterStauts({ ...characterStatus, phineasStatus: "Found" });
+        document.getElementById("characterPhineasStatus").style.color = "Green";
+      } else if (
+        selection === saitama.name &&
+        mouseGuessTarget[0] > saitama.minX &&
+        mouseGuessTarget[0] < saitama.maxX &&
+        mouseGuessTarget[1] > saitama.minY &&
+        mouseGuessTarget[1] < saitama.maxY
+      ) {
+        setCharacterStauts({ ...characterStatus, saitamaStatus: "Found" });
+        document.getElementById("characterSaitamaStatus").style.color = "Green";
+      } else {
       }
     },
-    groudon: {
-      name: "Groudon",
-      found: false,
-      minX: 180,
-      maxX: 300,
-      minY: 90,
-      maxY: 250,
+    gameOver: () => {
+      if (
+        characterStatus.zoidbergStatus === "Found" &&
+        characterStatus.phineasStatus === "Found" &&
+        characterStatus.saitamaStatus === "Found"
+      ) {
+        console.log("hi");
+      }
+    },
+    phineas: {
+      name: "Phineas",
+      minX: 1590,
+      maxX: 1650,
+      minY: 5375,
+      maxY: 5460,
+    },
+    zoidberg: {
+      name: "Zoidberg",
+      minX: 1230,
+      maxX: 1520,
+      minY: 5900,
+      maxY: 6200,
+    },
+    saitama: {
+      name: "Saitama",
+      minX: 500,
+      maxX: 580,
+      minY: 5580,
+      maxY: 5660,
     },
   };
 
@@ -109,20 +161,67 @@ const GameBoard = () => {
         popupWindow.removePopup(e);
       }}
     >
-      <div id="gameBoardTimeTracking">
-        <div>
-          {timeTracker.formatTime(hours)} {timeTracker.formatTime(miniutes)}{" "}
-          {timeTracker.formatTime(seconds)}
+      <div id="gameBoardTrackingDisplay">
+        <div id="gameBoardTrackingCharacters">
+          <div className="gameBoardTrackingCharactersSpecific">
+            <div>
+              Zoidberg{" "}
+              <div
+                id="characterZoidbergStatus"
+                className="gameBoardTrackingCharacterStatus"
+              >
+                {characterStatus.zoidbergStatus}
+              </div>
+            </div>
+            <img
+              class="gameBoardTrackingCharactersPhoto"
+              src={zoidbergPhoto}
+            ></img>{" "}
+          </div>
+          <div className="gameBoardTrackingCharactersSpecific">
+            <div>
+              Phineas{" "}
+              <div
+                id="characterPhineasStatus"
+                className="gameBoardTrackingCharacterStatus"
+              >
+                {characterStatus.phineasStatus}
+              </div>
+            </div>
+            <img
+              class="gameBoardTrackingCharactersPhoto"
+              src={phineasPhoto}
+            ></img>{" "}
+          </div>
+          <div className="gameBoardTrackingCharactersSpecific">
+            <div>
+              Saitama
+              <div
+                id="characterSaitamaStatus"
+                className="gameBoardTrackingCharacterStatus"
+              >
+                {characterStatus.saitamaStatus}
+              </div>
+            </div>
+            <img
+              class="gameBoardTrackingCharactersPhoto"
+              src={saitamaPhoto}
+            ></img>{" "}
+          </div>
+        </div>
+        <div id="gameBoardTrackingTime">
+          {timeTracker.formatTime(time.hours)}:{" "}
+          {timeTracker.formatTime(time.miniutes)} :{" "}
+          {timeTracker.formatTime(time.seconds)}
         </div>
       </div>
       <div>
-        {/* <div style={{color: "white"}}>{score}</div> */}
         <img
           onClick={(e) => {
             popupWindow.generatePopup(e);
           }}
           id="gameBoardTargets"
-          src={pokemonBkg}
+          src={characterBkg}
         ></img>
         <div
           id="popupWindow"
@@ -135,9 +234,9 @@ const GameBoard = () => {
             targetPositions.guess(e);
           }}
         >
-          <div className="popupItem">Groudon</div>
-          <div className="popupItem">Magneton</div>
-          <div className="popupItem">Ho-Oh</div>
+          <div className="popupItem">Phineas</div>
+          <div className="popupItem">Zoidberg</div>
+          <div className="popupItem">Saitama</div>
         </div>
       </div>
     </div>

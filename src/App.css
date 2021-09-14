@@ -3,11 +3,11 @@
 }
 
 #gameBoardScreen {
-  background-color: khaki;
+  background-color: rgb(0, 0, 0);
 }
 
 #gameBoardTargets {
-  max-width: 1300px;
+  max-width: 1650px;
   margin-top: 7vh;
 }
 
@@ -27,14 +27,42 @@
   cursor: grab;
 }
 
-#gameBoardTimeTracking {
+#gameBoardTrackingDisplay {
   width: 100%;
-  background-color: rgb(1, 1, 105);
+  background-color: rgba(0, 0, 0, 0.4);
   height: 7vh;
-  position: absolute;
+  position: fixed;
   color: white;
   font-size: 30px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+}
+
+#gameBoardTrackingCharacters {
+  width: 70%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.gameBoardTrackingCharactersSpecific {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 20%;
+  font-size: 20px;
+}
+
+.gameBoardTrackingCharactersPhoto {
+  width: 30%;
+  height: 7vh;
+}
+
+.gameBoardTrackingCharacterStatus {
+  color: red;
+}
+
+#gameBoardTrackingTime {
+  width: 30%;
 }
