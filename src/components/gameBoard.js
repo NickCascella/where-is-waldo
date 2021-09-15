@@ -4,6 +4,10 @@ import characterBkg from "../images/characterBackground.JPG";
 import zoidbergPhoto from "../images/zoidberg.JPG";
 import saitamaPhoto from "../images/saitama.JPG";
 import phineasPhoto from "../images/phineas.JPG";
+import GameOver from "./gameOver";
+
+//Timer
+//Global context, gameover and start screen on app level
 
 const GameBoard = () => {
   const [time, setTime] = useState({
@@ -18,6 +22,7 @@ const GameBoard = () => {
     phineasStatus: "Missing",
     saitamaStatus: "Missing",
   });
+  const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState([]);
 
   useEffect(() => {
@@ -29,33 +34,39 @@ const GameBoard = () => {
   }, [characterStatus]);
 
   const timer = () => {
-    //Fix copy ...time issue
-    if (timeTracker.seconds < 59) {
-      timeTracker.seconds += 1;
-    } else if (timeTracker.miniutes < 59) {
-      timeTracker.seconds = 0;
-      timeTracker.miniutes += 1;
-    } else if (timeTracker.hours < 59) {
-      timeTracker.seconds = 0;
-      timeTracker.miniutes = 0;
-      timeTracker.hours += 1;
+    if (gameOver === false) {
+      if (timeTracker.seconds < 59) {
+        timeTracker.seconds += 1;
+      } else if (timeTracker.miniutes < 59) {
+        timeTracker.seconds = 0;
+        timeTracker.miniutes += 1;
+      } else if (timeTracker.hours < 59) {
+        timeTracker.seconds = 0;
+        timeTracker.miniutes = 0;
+        timeTracker.hours += 1;
+      }
+      setTime({
+        seconds: timeTracker.seconds,
+        miniutes: timeTracker.miniutes,
+        hours: timeTracker.hours,
+      });
+      setTimeout(() => {
+        timer();
+      }, 1000);
     }
-    setTime({
-      seconds: timeTracker.seconds,
-      miniutes: timeTracker.miniutes,
-      hours: timeTracker.hours,
-    });
   };
 
   const timeTracker = {
+    timesUp: false,
     seconds: 0,
     miniutes: 0,
     hours: 0,
     startTimer: () => {
-      setInterval(timer, 1000);
+      timer();
     },
     stopTimer: () => {
-      clearInterval(timer);
+      timeTracker.timesUp = true;
+      console.log(timeTracker.timesUp);
     },
     formatTime: (time) => {
       const result = time < 10 ? `0${time}` : time;
@@ -86,40 +97,24 @@ const GameBoard = () => {
   };
 
   const targetPositions = {
-    guess: (e) => {
-      const selection = e.target.innerText;
-      const zoidberg = targetPositions.zoidberg;
-      const phineas = targetPositions.phineas;
-      const saitama = targetPositions.saitama;
+    guess: (character, statusColor) => {
       if (
-        selection === zoidberg.name &&
-        mouseGuessTarget[0] > zoidberg.minX &&
-        mouseGuessTarget[0] < zoidberg.maxX &&
-        mouseGuessTarget[1] > zoidberg.minY &&
-        mouseGuessTarget[1] < zoidberg.maxY
+        mouseGuessTarget[0] > character.minX &&
+        mouseGuessTarget[0] < character.maxX &&
+        mouseGuessTarget[1] > character.minY &&
+        mouseGuessTarget[1] < character.maxY
       ) {
-        setCharacterStauts({ ...characterStatus, zoidbergStatus: "Found" });
-        document.getElementById("characterZoidbergStatus").style.color =
-          "Green";
-      } else if (
-        selection === phineas.name &&
-        mouseGuessTarget[0] > phineas.minX &&
-        mouseGuessTarget[0] < phineas.maxX &&
-        mouseGuessTarget[1] > phineas.minY &&
-        mouseGuessTarget[1] < phineas.maxY
-      ) {
-        setCharacterStauts({ ...characterStatus, phineasStatus: "Found" });
-        document.getElementById("characterPhineasStatus").style.color = "Green";
-      } else if (
-        selection === saitama.name &&
-        mouseGuessTarget[0] > saitama.minX &&
-        mouseGuessTarget[0] < saitama.maxX &&
-        mouseGuessTarget[1] > saitama.minY &&
-        mouseGuessTarget[1] < saitama.maxY
-      ) {
-        setCharacterStauts({ ...characterStatus, saitamaStatus: "Found" });
-        document.getElementById("characterSaitamaStatus").style.color = "Green";
-      } else {
+        switch (character) {
+          case targetPositions.zoidberg:
+            setCharacterStauts({ ...characterStatus, zoidbergStatus: "Found" });
+            break;
+          case targetPositions.phineas:
+            setCharacterStauts({ ...characterStatus, phineasStatus: "Found" });
+            break;
+          case targetPositions.saitama:
+            setCharacterStauts({ ...characterStatus, saitamaStatus: "Found" });
+        }
+        document.getElementById(statusColor).style.color = "Green";
       }
     },
     gameOver: () => {
@@ -128,7 +123,8 @@ const GameBoard = () => {
         characterStatus.phineasStatus === "Found" &&
         characterStatus.saitamaStatus === "Found"
       ) {
-        console.log("hi");
+        setGameOver(true);
+        timeTracker.stopTimer();
       }
     },
     phineas: {
@@ -161,6 +157,7 @@ const GameBoard = () => {
         popupWindow.removePopup(e);
       }}
     >
+      ({gameOver && <GameOver></GameOver>})
       <div id="gameBoardTrackingDisplay">
         <div id="gameBoardTrackingCharacters">
           <div className="gameBoardTrackingCharactersSpecific">
@@ -174,7 +171,7 @@ const GameBoard = () => {
               </div>
             </div>
             <img
-              class="gameBoardTrackingCharactersPhoto"
+              className="gameBoardTrackingCharactersPhoto"
               src={zoidbergPhoto}
             ></img>{" "}
           </div>
@@ -189,7 +186,7 @@ const GameBoard = () => {
               </div>
             </div>
             <img
-              class="gameBoardTrackingCharactersPhoto"
+              className="gameBoardTrackingCharactersPhoto"
               src={phineasPhoto}
             ></img>{" "}
           </div>
@@ -204,7 +201,7 @@ const GameBoard = () => {
               </div>
             </div>
             <img
-              class="gameBoardTrackingCharactersPhoto"
+              className="gameBoardTrackingCharactersPhoto"
               src={saitamaPhoto}
             ></img>{" "}
           </div>
@@ -230,13 +227,40 @@ const GameBoard = () => {
             left: `${menuDropdownPosition[0]}px`,
             display: "none",
           }}
-          onClick={(e) => {
-            targetPositions.guess(e);
-          }}
         >
-          <div className="popupItem">Phineas</div>
-          <div className="popupItem">Zoidberg</div>
-          <div className="popupItem">Saitama</div>
+          <div
+            onClick={() => {
+              targetPositions.guess(
+                targetPositions.zoidberg,
+                "characterZoidbergStatus"
+              );
+            }}
+            className="popupItem"
+          >
+            Zoidberg
+          </div>
+          <div
+            onClick={() => {
+              targetPositions.guess(
+                targetPositions.phineas,
+                "characterPhineasStatus"
+              );
+            }}
+            className="popupItem"
+          >
+            Phineas
+          </div>
+          <div
+            onClick={() => {
+              targetPositions.guess(
+                targetPositions.saitama,
+                "characterSaitamaStatus"
+              );
+            }}
+            className="popupItem"
+          >
+            Saitama
+          </div>
         </div>
       </div>
     </div>

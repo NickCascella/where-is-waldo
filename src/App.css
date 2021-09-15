@@ -18,8 +18,10 @@
 #popupWindow {
   position: absolute;
   color: white;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10%;
   display: none;
+  padding: 5px;
 }
 
 .popupItem:hover {
@@ -65,4 +67,24 @@
 
 #gameBoardTrackingTime {
   width: 30%;
+}
+
+#gameOverScreenOuter {
+  position: fixed;
+  top: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(rgb(0, 0, 0), 0.5);
+  width: 100vw;
+  height: 100vh;
+}
+
+#gameOverScreenInner {
+  margin: auto;
+  width: 20vw;
+  height: 20vh;
+  background-color: white;
+  text-align: center;
 }

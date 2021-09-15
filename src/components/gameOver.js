@@ -1,5 +1,9 @@
 const GameOver = () => {
-  return <div id="gameOverScreen"></div>;
+  return (
+    <div id="gameOverScreenOuter">
+      <div id="gameOverScreenInner">Hello</div>
+    </div>
+  );
 };
 
 export default GameOver;
