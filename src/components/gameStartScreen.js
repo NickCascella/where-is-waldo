@@ -15,13 +15,14 @@ const GameStart = (props) => {
 
   const setName = (e) => {
     const name = e.target.value;
+    name.toString();
     setCurrentScore({ ...currentScore, name: name });
   };
 
   return (
     <div className="gameOverScreenOuter">
       <div className="gameOverScreenInner">
-        <div id="gameStartScreenLeftSide">
+        <div className="gameStartScreenLeftSide">
           <div>
             Welcome to{" "}
             <b>
@@ -31,7 +32,7 @@ const GameStart = (props) => {
           </div>
           <div>
             Find all the following characters as quick as you can to get the
-            highest score possible. Just enter your initals and click start to
+            best time possible. Just enter your initals and click start to
             begin!
           </div>
           <form
@@ -55,10 +56,10 @@ const GameStart = (props) => {
             </button>
           </form>
         </div>
-        <div id="gameStartScreenRightSide">
+        <div className="gameStartScreenRightSide">
           <div className="gameStartCharactersDisplayItem">
             <div className="gameStartCharactersDisplayText">
-              Zoidberg <div stlye={{ color: "green" }}>Easy</div>
+              Zoidberg <div id="gameStartDifficultyEasy">Easy</div>
             </div>
             <img
               className="gameStartCharactersDisplayPhoto"
@@ -67,7 +68,7 @@ const GameStart = (props) => {
           </div>
           <div className="gameStartCharactersDisplayItem">
             <div className="gameStartCharactersDisplayText">
-              Phinieas <div stlye={{ color: "Green" }}>Medium</div>
+              Phinieas <div id="gameStartDifficultyMedium">Medium</div>
             </div>
             <img
               className="gameStartCharactersDisplayPhoto"
@@ -76,7 +77,7 @@ const GameStart = (props) => {
           </div>
           <div className="gameStartCharactersDisplayItem">
             <div className="gameStartCharactersDisplayText">
-              Saitama <div stlye={{ color: "green" }}>Hard</div>
+              Saitama <div id="gameStartDifficultyHard">Hard</div>
             </div>
             <img
               className="gameStartCharactersDisplayPhoto"

@@ -16,6 +16,8 @@ const GameBoard = (props) => {
   const setGameOver = props.setGameOver;
   const highScore = props.highScore;
   const setHighScore = props.setHighScore;
+  const currentScore = props.currentScore;
+  const setCurrentScore = props.setCurrentScore;
 
   const [time, setTime] = useState({
     seconds: 0,
@@ -29,7 +31,6 @@ const GameBoard = (props) => {
     phineasStatus: "Missing",
     saitamaStatus: "Missing",
   });
-  const [score, setScore] = useState([]);
 
   useEffect(() => {
     timeTracker.startTimer();
@@ -73,7 +74,7 @@ const GameBoard = (props) => {
       clearInterval();
     },
     formatTime: (time) => {
-      const result = time < 10 ? `0${time}` : time;
+      const result = time < 10 ? `0${time}` : `${time}`;
       return result;
     },
   };
@@ -127,13 +128,31 @@ const GameBoard = (props) => {
         characterStatus.phineasStatus === "Found" &&
         characterStatus.saitamaStatus === "Found"
       ) {
+        const finalTime = { ...time };
+        const displayedTime = {
+          seconds: timeTracker.formatTime(finalTime.seconds),
+          miniutes: timeTracker.formatTime(finalTime.miniutes),
+          hours: timeTracker.formatTime(finalTime.hours),
+        };
+        const finalScore = {
+          name: currentScore.name,
+          score:
+            finalTime.hours * 100 + finalTime.miniutes * 10 + finalTime.seconds,
+          displayedTime: `${displayedTime.hours} : ${displayedTime.miniutes} : ${displayedTime.seconds}`,
+        };
+        setCurrentScore({
+          ...currentScore,
+          score: finalScore.score,
+          displayedTime: finalScore.displayedTime,
+        });
+        const previousHighScores = [...highScore];
+        previousHighScores.push(finalScore);
+        setHighScore(previousHighScores);
         setGameOver(true);
-        // const updatedHighScore = [...highScore];
-        // updatedHighScore.push({ name: "", score: 0 });
-        // setHighScore([...highScore]);
-        timeTracker.stopTimer();
+        // timeTracker.stopTimer();
       }
     },
+
     phineas: {
       name: "Phineas",
       minX: 1590,
