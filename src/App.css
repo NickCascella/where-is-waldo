@@ -59,6 +59,7 @@
 .gameBoardTrackingCharactersPhoto {
   width: 30%;
   height: 7vh;
+  border-radius: 5%;
 }
 
 .gameBoardTrackingCharacterStatus {
@@ -69,22 +70,97 @@
   width: 30%;
 }
 
-#gameOverScreenOuter {
+.gameOverScreenOuter {
   position: fixed;
-  top: 0;
+  top: 7vh;
   margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(rgb(0, 0, 0), 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100vw;
   height: 100vh;
 }
 
-#gameOverScreenInner {
+.gameOverScreenInner {
   margin: auto;
-  width: 20vw;
-  height: 20vh;
-  background-color: white;
+  width: 40vw;
+  height: 40vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 5%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1%;
+  font-size: 23px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+#gameStartScreenLeftSide {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#gameStartScreenForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 20%;
+  width: 50%;
+}
+
+input {
   text-align: center;
+  background: none;
+  border: solid 1px white;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+}
+
+#gameStartScreenButton {
+  width: 50%;
+  border-radius: 10%;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: monospace;
+}
+
+#gameStartScreenButton:hover {
+  cursor: pointer;
+}
+
+#gameStartScreenRightSide {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.gameStartCharactersDisplayItem {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  font-size: 22px;
+}
+
+.gameStartCharactersDisplayText {
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.gameStartCharactersDisplayPhoto {
+  width: 40%;
+  border-radius: 5%;
 }

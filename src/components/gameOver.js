@@ -1,7 +1,7 @@
 const GameOver = () => {
   return (
-    <div id="gameOverScreenOuter">
-      <div id="gameOverScreenInner">Hello</div>
+    <div className="gameOverScreenOuter">
+      <div className="gameOverScreenInner">Hello</div>
     </div>
   );
 };

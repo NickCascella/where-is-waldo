@@ -7,9 +7,16 @@ import phineasPhoto from "../images/phineas.JPG";
 import GameOver from "./gameOver";
 
 //Timer
-//Global context, gameover and start screen on app level
 
-const GameBoard = () => {
+const GameBoard = (props) => {
+  //states
+  const gameStartMenu = props.gameStart;
+  const setGameStart = props.setGameStart;
+  const gameOver = props.gameOver;
+  const setGameOver = props.setGameOver;
+  const highScore = props.highScore;
+  const setHighScore = props.setHighScore;
+
   const [time, setTime] = useState({
     seconds: 0,
     miniutes: 0,
@@ -22,19 +29,18 @@ const GameBoard = () => {
     phineasStatus: "Missing",
     saitamaStatus: "Missing",
   });
-  const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState([]);
 
   useEffect(() => {
     timeTracker.startTimer();
-  }, []);
+  }, [gameStartMenu]);
 
   useEffect(() => {
     targetPositions.gameOver();
   }, [characterStatus]);
 
   const timer = () => {
-    if (gameOver === false) {
+    if (gameStartMenu === false && gameOver === false) {
       if (timeTracker.seconds < 59) {
         timeTracker.seconds += 1;
       } else if (timeTracker.miniutes < 59) {
@@ -50,9 +56,6 @@ const GameBoard = () => {
         miniutes: timeTracker.miniutes,
         hours: timeTracker.hours,
       });
-      setTimeout(() => {
-        timer();
-      }, 1000);
     }
   };
 
@@ -62,11 +65,12 @@ const GameBoard = () => {
     miniutes: 0,
     hours: 0,
     startTimer: () => {
-      timer();
+      setInterval(() => {
+        timer();
+      }, 1000);
     },
     stopTimer: () => {
-      timeTracker.timesUp = true;
-      console.log(timeTracker.timesUp);
+      clearInterval();
     },
     formatTime: (time) => {
       const result = time < 10 ? `0${time}` : time;
@@ -124,6 +128,9 @@ const GameBoard = () => {
         characterStatus.saitamaStatus === "Found"
       ) {
         setGameOver(true);
+        // const updatedHighScore = [...highScore];
+        // updatedHighScore.push({ name: "", score: 0 });
+        // setHighScore([...highScore]);
         timeTracker.stopTimer();
       }
     },
@@ -157,7 +164,6 @@ const GameBoard = () => {
         popupWindow.removePopup(e);
       }}
     >
-      ({gameOver && <GameOver></GameOver>})
       <div id="gameBoardTrackingDisplay">
         <div id="gameBoardTrackingCharacters">
           <div className="gameBoardTrackingCharactersSpecific">
