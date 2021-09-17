@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import GameBoard from "./components/gameBoard";
 import GameOver from "./components/gameOver";
