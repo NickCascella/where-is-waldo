@@ -1,9 +1,8 @@
 import zoidbergPhoto from "../images/zoidberg.JPG";
 import saitamaPhoto from "../images/saitama.JPG";
-import phineasPhoto from "../images/phineas.JPG";
+import spiderManPhoto from "../images/spiderMan.JPEG";
 
 const GameStart = (props) => {
-  const gameStart = props.gameStart;
   const setGameStart = props.setGameStart;
   const currentScore = props.currentScore;
   const setCurrentScore = props.setCurrentScore;
@@ -68,11 +67,11 @@ const GameStart = (props) => {
           </div>
           <div className="gameStartCharactersDisplayItem">
             <div className="gameStartCharactersDisplayText">
-              Phinieas <div id="gameStartDifficultyMedium">Medium</div>
+              Spider-Man <div id="gameStartDifficultyMedium">Medium</div>
             </div>
             <img
               className="gameStartCharactersDisplayPhoto"
-              src={phineasPhoto}
+              src={spiderManPhoto}
             ></img>
           </div>
           <div className="gameStartCharactersDisplayItem">

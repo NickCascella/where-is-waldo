@@ -3,7 +3,7 @@ import { useState } from "react";
 import characterBkg from "../images/characterBackground.JPG";
 import zoidbergPhoto from "../images/zoidberg.JPG";
 import saitamaPhoto from "../images/saitama.JPG";
-import phineasPhoto from "../images/phineas.JPG";
+import spiderManPhoto from "../images/spiderMan.JPEG";
 
 const GameBoard = (props) => {
   //states
@@ -20,8 +20,8 @@ const GameBoard = (props) => {
   const [characterStatus, setCharacterStauts] = useState({
     zoidbergStatus: "Missing",
     zoidberStatusColor: "Red",
-    phineasStatus: "Missing",
-    phineasStatusColor: "Red",
+    spiderManStatus: "Missing",
+    spiderManStatusColor: "Red",
     saitamaStatus: "Missing",
     saitamaStatusColor: "Red",
   });
@@ -56,12 +56,14 @@ const GameBoard = (props) => {
     },
   };
 
+  //drop down menu for guess selection
   const popupWindow = {
     popup: document.getElementById("popupWindow"),
     generatePopup: (e) => {
       const mouseGuessX = e.nativeEvent.offsetX;
       const mouseGuessY = e.nativeEvent.offsetY;
       const targetCoardinates = [mouseGuessX, mouseGuessY];
+      console.log(targetCoardinates);
       setMouseGuessTarget(targetCoardinates);
       const mouseDropDownX = e.pageX;
       const mouseDropDownY = e.pageY;
@@ -77,8 +79,9 @@ const GameBoard = (props) => {
     },
   };
 
+  //check against guess selection
   const targetPositions = {
-    guess: (character, statusColor) => {
+    guess: (character) => {
       if (
         mouseGuessTarget[0] > character.minX &&
         mouseGuessTarget[0] < character.maxX &&
@@ -93,11 +96,11 @@ const GameBoard = (props) => {
               zoidberStatusColor: "Green",
             });
             break;
-          case targetPositions.phineas:
+          case targetPositions.spiderMan:
             setCharacterStauts({
               ...characterStatus,
-              phineasStatus: "Found",
-              phineasStatusColor: "Green",
+              spiderManStatus: "Found",
+              spiderManStatusColor: "Green",
             });
             break;
           case targetPositions.saitama:
@@ -112,7 +115,7 @@ const GameBoard = (props) => {
     gameOver: () => {
       if (
         characterStatus.zoidbergStatus === "Found" &&
-        characterStatus.phineasStatus === "Found" &&
+        characterStatus.spiderManStatus === "Found" &&
         characterStatus.saitamaStatus === "Found"
       ) {
         const displayedTime = {
@@ -135,12 +138,12 @@ const GameBoard = (props) => {
       }
     },
 
-    phineas: {
-      name: "Phineas",
-      minX: 1590,
-      maxX: 1650,
-      minY: 5375,
-      maxY: 5460,
+    spiderMan: {
+      name: "SpiderMan",
+      minX: 1000,
+      maxX: 1120,
+      minY: 6400,
+      maxY: 6510,
     },
     zoidberg: {
       name: "Zoidberg",
@@ -184,17 +187,17 @@ const GameBoard = (props) => {
           </div>
           <div className="gameBoardTrackingCharactersSpecific">
             <div>
-              Phineas{" "}
+              Spider-Man{" "}
               <div
                 id="characterPhineasStatus"
-                style={{ color: characterStatus.phineasStatusColor }}
+                style={{ color: characterStatus.spiderManStatusColor }}
               >
-                {characterStatus.phineasStatus}
+                {characterStatus.spiderManStatus}
               </div>
             </div>
             <img
               className="gameBoardTrackingCharactersPhoto"
-              src={phineasPhoto}
+              src={spiderManPhoto}
             ></img>{" "}
           </div>
           <div className="gameBoardTrackingCharactersSpecific">
@@ -237,10 +240,7 @@ const GameBoard = (props) => {
         >
           <div
             onClick={() => {
-              targetPositions.guess(
-                targetPositions.zoidberg,
-                "characterZoidbergStatus"
-              );
+              targetPositions.guess(targetPositions.zoidberg);
             }}
             className="popupItem"
           >
@@ -248,21 +248,15 @@ const GameBoard = (props) => {
           </div>
           <div
             onClick={() => {
-              targetPositions.guess(
-                targetPositions.phineas,
-                "characterPhineasStatus"
-              );
+              targetPositions.guess(targetPositions.spiderMan);
             }}
             className="popupItem"
           >
-            Phineas
+            Spider-Man
           </div>
           <div
             onClick={() => {
-              targetPositions.guess(
-                targetPositions.saitama,
-                "characterSaitamaStatus"
-              );
+              targetPositions.guess(targetPositions.saitama);
             }}
             className="popupItem"
           >

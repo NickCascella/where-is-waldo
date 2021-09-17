@@ -18,7 +18,6 @@ function App() {
     <div className="App">
       {gameStart && (
         <GameStart
-          gameStart={gameStart}
           setGameStart={setGameStart}
           currentScore={currentScore}
           setCurrentScore={setCurrentScore}
@@ -28,7 +27,6 @@ function App() {
         gameOver={gameOver}
         setGameOver={setGameOver}
         gameStart={gameStart}
-        setGameStart={setGameStart}
         highScore={highScore}
         setHighScore={setHighScore}
         currentScore={currentScore}
