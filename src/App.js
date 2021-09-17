@@ -12,9 +12,7 @@ function App() {
     score: 0,
     displayedTime: "",
   });
-  const [highScore, setHighScore] = useState([
-    { name: "Test", score: 2, displayedTime: "00 : 2 : 20" },
-  ]);
+  const [highScore, setHighScore] = useState([]);
 
   return (
     <div className="App">

@@ -1,11 +1,8 @@
-import { useEffect } from "react";
-
 const GameOver = (props) => {
-  const highScore = props.highScore;
-  const setHighScore = props.setHighScore;
+  const highScoreData = props.highScore;
   const currentScore = props.currentScore;
 
-  const highScores = [...highScore];
+  const highScores = [...highScoreData];
   const finalScore = { ...currentScore };
 
   const organizedHighScores = highScores.sort((a, b) => {

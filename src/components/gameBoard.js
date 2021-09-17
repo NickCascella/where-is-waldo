@@ -4,37 +4,31 @@ import characterBkg from "../images/characterBackground.JPG";
 import zoidbergPhoto from "../images/zoidberg.JPG";
 import saitamaPhoto from "../images/saitama.JPG";
 import phineasPhoto from "../images/phineas.JPG";
-import GameOver from "./gameOver";
-
-//Timer
 
 const GameBoard = (props) => {
   //states
   const gameStartMenu = props.gameStart;
-  const setGameStart = props.setGameStart;
   const gameOver = props.gameOver;
   const setGameOver = props.setGameOver;
   const highScore = props.highScore;
   const setHighScore = props.setHighScore;
   const currentScore = props.currentScore;
   const setCurrentScore = props.setCurrentScore;
-
-  const [time, setTime] = useState({
-    seconds: 0,
-    miniutes: 0,
-    hours: 0,
-  });
+  const [seconds, setSeconds] = useState(0);
   const [menuDropdownPosition, setMenuDropdownPosition] = useState([0, 0]);
   const [mouseGuessTarget, setMouseGuessTarget] = useState([0, 0]);
   const [characterStatus, setCharacterStauts] = useState({
     zoidbergStatus: "Missing",
+    zoidberStatusColor: "Red",
     phineasStatus: "Missing",
+    phineasStatusColor: "Red",
     saitamaStatus: "Missing",
+    saitamaStatusColor: "Red",
   });
 
   useEffect(() => {
-    timeTracker.startTimer();
-  }, [gameStartMenu]);
+    setTimeout(timer, 1000);
+  }, [gameStartMenu, seconds]);
 
   useEffect(() => {
     targetPositions.gameOver();
@@ -42,40 +36,23 @@ const GameBoard = (props) => {
 
   const timer = () => {
     if (gameStartMenu === false && gameOver === false) {
-      if (timeTracker.seconds < 59) {
-        timeTracker.seconds += 1;
-      } else if (timeTracker.miniutes < 59) {
-        timeTracker.seconds = 0;
-        timeTracker.miniutes += 1;
-      } else if (timeTracker.hours < 59) {
-        timeTracker.seconds = 0;
-        timeTracker.miniutes = 0;
-        timeTracker.hours += 1;
-      }
-      setTime({
-        seconds: timeTracker.seconds,
-        miniutes: timeTracker.miniutes,
-        hours: timeTracker.hours,
-      });
+      setSeconds(seconds + 1);
     }
   };
 
   const timeTracker = {
-    timesUp: false,
-    seconds: 0,
-    miniutes: 0,
-    hours: 0,
-    startTimer: () => {
-      setInterval(() => {
-        timer();
-      }, 1000);
-    },
-    stopTimer: () => {
-      clearInterval();
-    },
     formatTime: (time) => {
       const result = time < 10 ? `0${time}` : `${time}`;
       return result;
+    },
+    formatSeconds: () => {
+      return gameOver !== true ? seconds % 60 : (seconds % 60) - 1;
+    },
+    formatMinutes: () => {
+      return Math.floor(seconds / 60);
+    },
+    formatHours: () => {
+      return Math.floor(seconds / 3600);
     },
   };
 
@@ -98,7 +75,6 @@ const GameBoard = (props) => {
           : (popupWindow.popup.style.display = "block");
       return clicked;
     },
-    confirmTarget: (e) => {},
   };
 
   const targetPositions = {
@@ -111,15 +87,26 @@ const GameBoard = (props) => {
       ) {
         switch (character) {
           case targetPositions.zoidberg:
-            setCharacterStauts({ ...characterStatus, zoidbergStatus: "Found" });
+            setCharacterStauts({
+              ...characterStatus,
+              zoidbergStatus: "Found",
+              zoidberStatusColor: "Green",
+            });
             break;
           case targetPositions.phineas:
-            setCharacterStauts({ ...characterStatus, phineasStatus: "Found" });
+            setCharacterStauts({
+              ...characterStatus,
+              phineasStatus: "Found",
+              phineasStatusColor: "Green",
+            });
             break;
           case targetPositions.saitama:
-            setCharacterStauts({ ...characterStatus, saitamaStatus: "Found" });
+            setCharacterStauts({
+              ...characterStatus,
+              saitamaStatus: "Found",
+              saitamaStatusColor: "Green",
+            });
         }
-        document.getElementById(statusColor).style.color = "Green";
       }
     },
     gameOver: () => {
@@ -128,16 +115,14 @@ const GameBoard = (props) => {
         characterStatus.phineasStatus === "Found" &&
         characterStatus.saitamaStatus === "Found"
       ) {
-        const finalTime = { ...time };
         const displayedTime = {
-          seconds: timeTracker.formatTime(finalTime.seconds),
-          miniutes: timeTracker.formatTime(finalTime.miniutes),
-          hours: timeTracker.formatTime(finalTime.hours),
+          seconds: timeTracker.formatTime(timeTracker.formatSeconds()),
+          miniutes: timeTracker.formatTime(timeTracker.formatMinutes()),
+          hours: timeTracker.formatTime(timeTracker.formatHours()),
         };
         const finalScore = {
           name: currentScore.name,
-          score:
-            finalTime.hours * 100 + finalTime.miniutes * 10 + finalTime.seconds,
+          score: seconds,
           displayedTime: `${displayedTime.hours} : ${displayedTime.miniutes} : ${displayedTime.seconds}`,
         };
         setCurrentScore({
@@ -145,11 +130,8 @@ const GameBoard = (props) => {
           score: finalScore.score,
           displayedTime: finalScore.displayedTime,
         });
-        const previousHighScores = [...highScore];
-        previousHighScores.push(finalScore);
-        setHighScore(previousHighScores);
+        setHighScore(highScore.concat(finalScore));
         setGameOver(true);
-        // timeTracker.stopTimer();
       }
     },
 
@@ -190,7 +172,7 @@ const GameBoard = (props) => {
               Zoidberg{" "}
               <div
                 id="characterZoidbergStatus"
-                className="gameBoardTrackingCharacterStatus"
+                style={{ color: characterStatus.zoidberStatusColor }}
               >
                 {characterStatus.zoidbergStatus}
               </div>
@@ -205,7 +187,7 @@ const GameBoard = (props) => {
               Phineas{" "}
               <div
                 id="characterPhineasStatus"
-                className="gameBoardTrackingCharacterStatus"
+                style={{ color: characterStatus.phineasStatusColor }}
               >
                 {characterStatus.phineasStatus}
               </div>
@@ -220,7 +202,7 @@ const GameBoard = (props) => {
               Saitama
               <div
                 id="characterSaitamaStatus"
-                className="gameBoardTrackingCharacterStatus"
+                style={{ color: characterStatus.saitamaStatusColor }}
               >
                 {characterStatus.saitamaStatus}
               </div>
@@ -232,9 +214,9 @@ const GameBoard = (props) => {
           </div>
         </div>
         <div id="gameBoardTrackingTime">
-          {timeTracker.formatTime(time.hours)}:{" "}
-          {timeTracker.formatTime(time.miniutes)} :{" "}
-          {timeTracker.formatTime(time.seconds)}
+          {timeTracker.formatTime(timeTracker.formatHours())} :{" "}
+          {timeTracker.formatTime(timeTracker.formatMinutes())} :{" "}
+          {timeTracker.formatTime(timeTracker.formatSeconds())}
         </div>
       </div>
       <div>
