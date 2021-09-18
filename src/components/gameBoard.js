@@ -4,10 +4,14 @@ import characterBkg from "../images/characterBackground.JPG";
 import zoidbergPhoto from "../images/zoidberg.JPG";
 import saitamaPhoto from "../images/saitama.JPG";
 import spiderManPhoto from "../images/spiderMan.JPEG";
+import { v4 as uuidv4 } from "uuid";
+import { doc, setDoc } from "firebase/firestore";
+import db from "../firebase";
 
 const GameBoard = (props) => {
   //states
   const gameStartMenu = props.gameStart;
+  const characterLocations = props.characterLocations;
   const gameOver = props.gameOver;
   const setGameOver = props.setGameOver;
   const highScore = props.highScore;
@@ -63,7 +67,6 @@ const GameBoard = (props) => {
       const mouseGuessX = e.nativeEvent.offsetX;
       const mouseGuessY = e.nativeEvent.offsetY;
       const targetCoardinates = [mouseGuessX, mouseGuessY];
-      console.log(targetCoardinates);
       setMouseGuessTarget(targetCoardinates);
       const mouseDropDownX = e.pageX;
       const mouseDropDownY = e.pageY;
@@ -112,6 +115,13 @@ const GameBoard = (props) => {
         }
       }
     },
+    setHighscoreDatabase: (finalScore) => {
+      setDoc(doc(db, "highscores", finalScore.id), {
+        name: finalScore.name,
+        score: finalScore.score,
+        displayedTime: finalScore.displayedTime,
+      });
+    },
     gameOver: () => {
       if (
         characterStatus.zoidbergStatus === "Found" &&
@@ -127,38 +137,23 @@ const GameBoard = (props) => {
           name: currentScore.name,
           score: seconds,
           displayedTime: `${displayedTime.hours} : ${displayedTime.miniutes} : ${displayedTime.seconds}`,
+          id: uuidv4(),
         };
         setCurrentScore({
           ...currentScore,
           score: finalScore.score,
           displayedTime: finalScore.displayedTime,
         });
-        setHighScore(highScore.concat(finalScore));
+        const newHighscore = [...highScore];
+        newHighscore.push(finalScore);
+        setHighScore(newHighscore);
+        targetPositions.setHighscoreDatabase(finalScore);
         setGameOver(true);
       }
     },
-
-    spiderMan: {
-      name: "SpiderMan",
-      minX: 1000,
-      maxX: 1120,
-      minY: 6400,
-      maxY: 6510,
-    },
-    zoidberg: {
-      name: "Zoidberg",
-      minX: 1230,
-      maxX: 1520,
-      minY: 5900,
-      maxY: 6200,
-    },
-    saitama: {
-      name: "Saitama",
-      minX: 500,
-      maxX: 580,
-      minY: 5580,
-      maxY: 5660,
-    },
+    spiderMan: characterLocations[1],
+    zoidberg: characterLocations[2],
+    saitama: characterLocations[0],
   };
 
   return (

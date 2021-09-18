@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { onSnapshot, collection } from "@firebase/firestore";
+import { useEffect, useState } from "react";
 import "./App.css";
 import GameBoard from "./components/gameBoard";
 import GameOver from "./components/gameOver";
 import GameStart from "./components/gameStartScreen";
+import db from "./firebase";
+import firebase from "./firebase";
 
+console.log(firebase);
 function App() {
   const [gameOver, setGameOver] = useState(false);
   const [gameStart, setGameStart] = useState(true);
@@ -13,6 +17,22 @@ function App() {
     displayedTime: "",
   });
   const [highScore, setHighScore] = useState([]);
+  const [testHighscore, setTestHighscore] = useState([]);
+  const [characterLocations, setCharacterLocations] = useState([]);
+
+  useEffect(() => {
+    onSnapshot(collection(db, "missingCharacters"), (snapshot) => {
+      setCharacterLocations(snapshot.docs.map((doc) => doc.data()));
+    });
+    onSnapshot(collection(db, "highscores"), (snapshot) => {
+      const info = snapshot.docs.map((doc) => doc.data());
+      setHighScore(info);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(testHighscore);
+  }, [testHighscore]);
 
   return (
     <div className="App">
@@ -27,6 +47,7 @@ function App() {
         gameOver={gameOver}
         setGameOver={setGameOver}
         gameStart={gameStart}
+        characterLocations={characterLocations}
         highScore={highScore}
         setHighScore={setHighScore}
         currentScore={currentScore}
