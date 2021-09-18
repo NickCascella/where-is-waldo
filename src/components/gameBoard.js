@@ -18,6 +18,7 @@ const GameBoard = (props) => {
   const setHighScore = props.setHighScore;
   const currentScore = props.currentScore;
   const setCurrentScore = props.setCurrentScore;
+
   const [seconds, setSeconds] = useState(0);
   const [menuDropdownPosition, setMenuDropdownPosition] = useState([0, 0]);
   const [mouseGuessTarget, setMouseGuessTarget] = useState([0, 0]);
@@ -115,11 +116,13 @@ const GameBoard = (props) => {
         }
       }
     },
+    //updates database highscores
     setHighscoreDatabase: (finalScore) => {
-      setDoc(doc(db, "highscores", finalScore.id), {
+      setDoc(doc(db, "highscores", `${finalScore.name}---${finalScore.id}`), {
         name: finalScore.name,
         score: finalScore.score,
         displayedTime: finalScore.displayedTime,
+        id: finalScore.id,
       });
     },
     gameOver: () => {
@@ -151,6 +154,7 @@ const GameBoard = (props) => {
         setGameOver(true);
       }
     },
+    //coardinates for each character, pulled from firebase
     spiderMan: characterLocations[1],
     zoidberg: characterLocations[2],
     saitama: characterLocations[0],

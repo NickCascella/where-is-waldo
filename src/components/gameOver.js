@@ -1,7 +1,6 @@
 const GameOver = (props) => {
   const highScoreData = props.highScore;
   const currentScore = props.currentScore;
-
   const highScores = [...highScoreData];
   const finalScore = { ...currentScore };
 
@@ -25,7 +24,10 @@ const GameOver = (props) => {
         {topFiveHighscores.map((scoreData) => {
           if (scoreData !== undefined) {
             return (
-              <div className="gameOverScreenIndividualHighscores">
+              <div
+                id={scoreData.id}
+                className="gameOverScreenIndividualHighscores"
+              >
                 <span>Name: {scoreData.name}</span>
                 <span>Time: {scoreData.displayedTime}</span>
               </div>
