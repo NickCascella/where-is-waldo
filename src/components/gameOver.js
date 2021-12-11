@@ -20,7 +20,7 @@ const GameOver = (props) => {
 
   const displayedHighScores = () => {
     return (
-      <div>
+      <div className="scoreDisplay">
         {topFiveHighscores.map((scoreData) => {
           if (scoreData !== undefined) {
             return (

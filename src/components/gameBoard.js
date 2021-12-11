@@ -86,6 +86,7 @@ const GameBoard = (props) => {
   //check against guess selection
   const targetPositions = {
     guess: (character) => {
+      console.log(mouseGuessTarget)
       if (
         mouseGuessTarget[0] > character.minX &&
         mouseGuessTarget[0] < character.maxX &&
